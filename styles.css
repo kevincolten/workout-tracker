@@ -1,0 +1,638 @@
+/* CSS Variables */
+:root {
+    --primary-color: #e53935;
+    --primary-dark: #c62828;
+    --secondary-color: #424242;
+    --background: #f5f5f5;
+    --card-bg: #ffffff;
+    --text-primary: #212121;
+    --text-secondary: #757575;
+    --border-color: #e0e0e0;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --pull-color: #e53935;
+    --push-color: #1976d2;
+    --legs-color: #388e3c;
+}
+
+/* Reset and Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-top: 0.25rem;
+}
+
+/* Workout Tabs */
+.workout-tabs {
+    display: flex;
+    background: var(--card-bg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    color: var(--text-secondary);
+}
+
+.tab-btn:hover {
+    background: var(--background);
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.tab-btn[data-workout="pull"].active {
+    color: var(--pull-color);
+    border-bottom-color: var(--pull-color);
+}
+
+.tab-btn[data-workout="push"].active {
+    color: var(--push-color);
+    border-bottom-color: var(--push-color);
+}
+
+.tab-btn[data-workout="legs"].active {
+    color: var(--legs-color);
+    border-bottom-color: var(--legs-color);
+}
+
+/* Main Content */
+main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Sync Status */
+.sync-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+#sync-indicator {
+    font-size: 0.75rem;
+}
+
+#sync-indicator.synced {
+    color: var(--success-color);
+}
+
+#sync-indicator.syncing {
+    color: var(--warning-color);
+    animation: pulse 1s infinite;
+}
+
+#sync-indicator.error {
+    color: var(--primary-color);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+#sync-text {
+    flex: 1;
+    color: var(--text-secondary);
+}
+
+.btn-small {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-small:hover {
+    background: var(--primary-dark);
+}
+
+/* nPoint Setup */
+.npoint-setup {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.npoint-setup h3 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.npoint-setup p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.npoint-setup input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+}
+
+.npoint-setup input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.help-text {
+    font-size: 0.8rem !important;
+    margin-top: 0.5rem !important;
+}
+
+.help-text a {
+    color: var(--primary-color);
+}
+
+.help-text code {
+    background: var(--background);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.npoint-setup.hidden {
+    display: none;
+}
+
+/* Workout Section */
+.workout-section {
+    margin-bottom: 1rem;
+}
+
+.workout-section.hidden {
+    display: none;
+}
+
+.workout-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#pull-section h2 { color: var(--pull-color); }
+#push-section h2 { color: var(--push-color); }
+#legs-section h2 { color: var(--legs-color); }
+
+/* Exercise Card */
+.exercise-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.exercise-header {
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.2s;
+}
+
+.exercise-header:hover {
+    background: var(--background);
+}
+
+.exercise-name {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.exercise-summary {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.exercise-toggle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    transition: transform 0.2s;
+}
+
+.exercise-card.expanded .exercise-toggle {
+    transform: rotate(180deg);
+}
+
+.exercise-body {
+    padding: 1rem;
+    display: none;
+}
+
+.exercise-card.expanded .exercise-body {
+    display: block;
+}
+
+/* Set Row */
+.set-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.set-row:last-child {
+    border-bottom: none;
+}
+
+.set-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.set-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.set-input label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.set-input input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.set-input input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.set-input input.improved {
+    border-color: var(--success-color);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.set-check {
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: all 0.2s;
+}
+
+.set-check:hover {
+    border-color: var(--success-color);
+}
+
+.set-check.completed {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+}
+
+/* Previous Performance */
+.previous-performance {
+    background: var(--background);
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+.previous-performance .label {
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.previous-performance .value {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Weight Suggestion */
+.weight-suggestion {
+    font-size: 0.75rem;
+    color: var(--success-color);
+    margin-top: 0.25rem;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+    margin-top: 0.5rem;
+}
+
+.btn-secondary:hover {
+    background: #333;
+}
+
+.actions {
+    margin-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-size: 1.25rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0.25rem;
+}
+
+.close-btn:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+/* History Items */
+.history-item {
+    background: var(--background);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+}
+
+.history-date {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-type {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    color: white;
+}
+
+.history-type.pull { background: var(--pull-color); }
+.history-type.push { background: var(--push-color); }
+.history-type.legs { background: var(--legs-color); }
+
+.history-exercises {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.history-exercise {
+    margin-top: 0.5rem;
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--border-color);
+}
+
+.history-exercise-name {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.history-sets {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+.no-history {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--secondary-color);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1001;
+    animation: slideUp 0.3s ease;
+}
+
+.toast.hidden {
+    display: none;
+}
+
+.toast.success {
+    background: var(--success-color);
+}
+
+.toast.error {
+    background: var(--primary-color);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+    .set-row {
+        grid-template-columns: 40px 1fr 1fr auto;
+        gap: 0.5rem;
+    }
+
+    .set-input input {
+        padding: 0.4rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Add Set Button */
+.add-set-btn {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    background: var(--background);
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-set-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Remove Set Button */
+.remove-set-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.set-row:hover .remove-set-btn {
+    opacity: 1;
+}
+
+.remove-set-btn:hover {
+    color: var(--primary-color);
+}

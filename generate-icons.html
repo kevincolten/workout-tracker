@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate PWA Icons</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .icons { display: flex; gap: 20px; flex-wrap: wrap; }
+        .icon-item { text-align: center; }
+        canvas { border: 1px solid #ccc; }
+        button { margin-top: 10px; padding: 8px 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>PWA Icon Generator</h1>
+    <p>Click each button to download the icon. Save them to the <code>icons/</code> folder.</p>
+    <div class="icons" id="icons"></div>
+
+    <script>
+        const sizes = [192, 512];
+
+        function drawIcon(ctx, size) {
+            // Background
+            ctx.fillStyle = '#e53935';
+            const radius = size * 0.125;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, radius);
+            ctx.fill();
+
+            // Dumbbell
+            ctx.fillStyle = '#ffffff';
+            const scale = size / 512;
+
+            // Center bar
+            ctx.fillRect(160 * scale, 236 * scale, 192 * scale, 40 * scale);
+
+            // Left weight plates
+            ctx.beginPath();
+            ctx.roundRect(140 * scale, 140 * scale, 60 * scale, 232 * scale, 12 * scale);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.roundRect(120 * scale, 160 * scale, 40 * scale, 192 * scale, 8 * scale);
+            ctx.fill();
+
+            // Right weight plates
+            ctx.beginPath();
+            ctx.roundRect(312 * scale, 140 * scale, 60 * scale, 232 * scale, 12 * scale);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.roundRect(352 * scale, 160 * scale, 40 * scale, 192 * scale, 8 * scale);
+            ctx.fill();
+
+            // Center grip
+            ctx.beginPath();
+            ctx.roundRect(200 * scale, 180 * scale, 112 * scale, 152 * scale, 8 * scale);
+            ctx.fill();
+        }
+
+        function createIconElement(size) {
+            const container = document.createElement('div');
+            container.className = 'icon-item';
+
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            drawIcon(ctx, size);
+
+            const btn = document.createElement('button');
+            btn.textContent = `Download ${size}x${size}`;
+            btn.onclick = () => {
+                const link = document.createElement('a');
+                link.download = `icon-${size}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            };
+
+            container.appendChild(canvas);
+            container.appendChild(document.createElement('br'));
+            container.appendChild(btn);
+
+            return container;
+        }
+
+        const iconsContainer = document.getElementById('icons');
+        sizes.forEach(size => {
+            iconsContainer.appendChild(createIconElement(size));
+        });
+    </script>
+</body>
+</html>

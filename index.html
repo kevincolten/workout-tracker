@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track your Push Pull Legs weightlifting workouts">
+    <meta name="theme-color" content="#e53935">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+    <title>Workout Tracker - Push Pull Legs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>🏋️ Workout Tracker</h1>
+        <p class="subtitle">Push Pull Legs Routine</p>
+    </header>
+
+    <nav class="workout-tabs">
+        <button class="tab-btn active" data-workout="pull">Pull</button>
+        <button class="tab-btn" data-workout="push">Push</button>
+        <button class="tab-btn" data-workout="legs">Legs</button>
+    </nav>
+
+    <main>
+        <div class="sync-status">
+            <span id="sync-indicator">●</span>
+            <span id="sync-text">Not synced</span>
+            <button id="sync-btn" class="btn-small">Sync</button>
+        </div>
+
+        <div class="npoint-setup" id="npoint-setup">
+            <h3>Setup Data Sync</h3>
+            <p>Enter your npoint.io bin ID to sync your workout data:</p>
+            <input type="text" id="npoint-id" placeholder="e.g., abc123def456">
+            <button id="save-npoint" class="btn">Save & Sync</button>
+            <p class="help-text">
+                Don't have one? Create a free bin at
+                <a href="https://www.npoint.io/" target="_blank">npoint.io</a>
+                with an empty object <code>{}</code>
+            </p>
+        </div>
+
+        <!-- Pull Workout -->
+        <section class="workout-section" id="pull-section">
+            <h2>Pull Day</h2>
+            <div class="exercises" id="pull-exercises"></div>
+        </section>
+
+        <!-- Push Workout -->
+        <section class="workout-section hidden" id="push-section">
+            <h2>Push Day</h2>
+            <div class="exercises" id="push-exercises"></div>
+        </section>
+
+        <!-- Legs Workout -->
+        <section class="workout-section hidden" id="legs-section">
+            <h2>Legs Day</h2>
+            <div class="exercises" id="legs-exercises"></div>
+        </section>
+
+        <div class="actions">
+            <button id="finish-workout" class="btn btn-primary">Finish Workout</button>
+            <button id="view-history" class="btn btn-secondary">View History</button>
+        </div>
+    </main>
+
+    <!-- History Modal -->
+    <div class="modal hidden" id="history-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Workout History</h2>
+                <button class="close-btn" id="close-history">&times;</button>
+            </div>
+            <div class="modal-body" id="history-content">
+                <!-- History will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
