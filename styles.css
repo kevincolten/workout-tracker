@@ -224,6 +224,33 @@ main {
     display: none;
 }
 
+/* nPoint Connected Status */
+.npoint-connected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card-bg);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.npoint-connected.hidden {
+    display: none;
+}
+
+.npoint-connected code {
+    background: var(--background);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.btn-danger {
+    background: var(--primary-color) !important;
+}
+
 /* Workout Section */
 .workout-section {
     margin-bottom: 1rem;

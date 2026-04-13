@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Workout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: #000;
+            color: #fff;
+            font-size: 16px;
+            touch-action: manipulation;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        input, select, button {
+            font-size: 16px;
+            touch-action: manipulation;
+        }
+
+        /* Header */
+        .header {
+            background: #1c1c1e;
+            padding: 8px 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header.pull { color: #ff453a; }
+        .header.push { color: #0a84ff; }
+        .header.legs { color: #30d158; }
+
+        /* Workout Selection */
+        .workout-select {
+            display: flex;
+            gap: 6px;
+            padding: 10px;
+        }
+
+        .workout-btn {
+            flex: 1;
+            padding: 14px 8px;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #2c2c2e;
+            color: #fff;
+        }
+
+        .workout-btn.active {
+            color: #000;
+        }
+
+        .workout-btn.pull.active { background: #ff453a; }
+        .workout-btn.push.active { background: #0a84ff; }
+        .workout-btn.legs.active { background: #30d158; }
+
+        /* Exercise List */
+        .exercises {
+            padding: 0 10px 10px;
+        }
+
+        .exercise {
+            background: #1c1c1e;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        .exercise-header {
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .exercise-name {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .exercise-status {
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        .exercise-body {
+            display: none;
+            padding: 0 12px 12px;
+        }
+
+        .exercise.open .exercise-body {
+            display: block;
+        }
+
+        /* Set Row */
+        .set-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid #2c2c2e;
+        }
+
+        .set-row:last-child {
+            border-bottom: none;
+        }
+
+        .set-num {
+            width: 24px;
+            font-size: 13px;
+            color: #8e8e93;
+            text-align: center;
+        }
+
+        .set-input {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .set-input label {
+            font-size: 10px;
+            color: #8e8e93;
+            text-transform: uppercase;
+        }
+
+        .set-input input {
+            width: 100%;
+            padding: 10px;
+            background: #2c2c2e;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .set-input input::placeholder {
+            color: #636366;
+        }
+
+        .set-check {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid #3a3a3c;
+            background: transparent;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .set-check.done {
+            background: #30d158;
+            border-color: #30d158;
+        }
+
+        /* Previous */
+        .previous {
+            font-size: 11px;
+            color: #8e8e93;
+            padding: 6px;
+            background: #2c2c2e;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        /* Actions */
+        .actions {
+            padding: 10px;
+            padding-bottom: 20px;
+        }
+
+        .finish-btn {
+            width: 100%;
+            padding: 16px;
+            background: #30d158;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .finish-btn:disabled {
+            background: #2c2c2e;
+            color: #636366;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+            background: #30d158;
+            color: #000;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(10px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+
+        /* Setup */
+        .setup {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .setup input {
+            width: 100%;
+            padding: 14px;
+            background: #1c1c1e;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .setup button {
+            width: 100%;
+            padding: 14px;
+            background: #0a84ff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Sync indicator */
+        .sync-indicator {
+            font-size: 11px;
+            color: #8e8e93;
+            text-align: center;
+            padding: 4px;
+        }
+
+        .sync-indicator.synced {
+            color: #30d158;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Setup Screen -->
+        <div class="setup" id="setup">
+            <p style="margin-bottom: 16px; color: #8e8e93;">Enter your sync ID</p>
+            <input type="text" id="key-input" placeholder="npoint.io ID">
+            <button id="save-key">Connect</button>
+        </div>
+
+        <!-- Main App -->
+        <div id="main" class="hidden">
+            <div class="header" id="header">Pull Day</div>
+            <div class="sync-indicator" id="sync-status">Not synced</div>
+
+            <div class="workout-select">
+                <button class="workout-btn pull active" data-type="pull">Pull</button>
+                <button class="workout-btn push" data-type="push">Push</button>
+                <button class="workout-btn legs" data-type="legs">Legs</button>
+            </div>
+
+            <div class="exercises" id="exercises"></div>
+
+            <div class="actions">
+                <button class="finish-btn" id="finish" disabled>Finish Workout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Workout definitions
+        const WORKOUTS = {
+            pull: [
+                { id: 'deadlift', name: 'Deadlift', sets: 3, reps: 5 },
+                { id: 'pullup', name: 'Pullup', sets: 3, reps: 8 },
+                { id: 'seated-cable-row', name: 'Cable Row', sets: 3, reps: 10 },
+                { id: 'lat-pulldown', name: 'Lat Pulldown', sets: 3, reps: 10 },
+                { id: 'hammer-curl', name: 'Hammer Curl', sets: 3, reps: 12 },
+                { id: 'curl', name: 'Curl', sets: 3, reps: 12 }
+            ],
+            push: [
+                { id: 'bench-press', name: 'Bench Press', sets: 3, reps: 8 },
+                { id: 'overhead-press', name: 'OHP', sets: 3, reps: 8 },
+                { id: 'incline-bench-press', name: 'Incline Bench', sets: 3, reps: 10 },
+                { id: 'tricep-pushdown', name: 'Tri Pushdown', sets: 3, reps: 12 },
+                { id: 'lateral-raise', name: 'Lat Raise', sets: 3, reps: 15 },
+                { id: 'overhead-triceps-extension', name: 'Tri Extension', sets: 3, reps: 12 }
+            ],
+            legs: [
+                { id: 'squat', name: 'Squat', sets: 3, reps: 8 },
+                { id: 'romanian-deadlift', name: 'RDL', sets: 3, reps: 10 },
+                { id: 'leg-press', name: 'Leg Press', sets: 3, reps: 12 },
+                { id: 'leg-curl', name: 'Leg Curl', sets: 3, reps: 12 },
+                { id: 'calf-raise', name: 'Calf Raise', sets: 4, reps: 15 },
+                { id: 'glute-drive', name: 'Glute Drive', sets: 3, reps: 12 }
+            ]
+        };
+
+        let state = {
+            key: localStorage.getItem('npointId'),
+            type: 'pull',
+            history: [],
+            session: {}
+        };
+
+        // Check URL params
+        function checkParams() {
+            const params = new URLSearchParams(window.location.search);
+            const key = params.get('key');
+            if (key) {
+                state.key = key;
+                localStorage.setItem('npointId', key);
+                window.history.replaceState({}, '', window.location.pathname);
+                return true;
+            }
+            return false;
+        }
+
+        // API
+        async function fetchData() {
+            if (!state.key) return null;
+            try {
+                const r = await fetch(`https://api.npoint.io/${state.key}`);
+                return r.ok ? await r.json() : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function saveData(data) {
+            if (!state.key) return false;
+            try {
+                const r = await fetch(`https://api.npoint.io/${state.key}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                return r.ok;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        async function sync() {
+            document.getElementById('sync-status').textContent = 'Syncing...';
+            const remote = await fetchData();
+            if (remote && remote.workoutHistory) {
+                state.history = remote.workoutHistory;
+                localStorage.setItem('workoutHistory', JSON.stringify(state.history));
+            }
+            document.getElementById('sync-status').textContent = 'Synced';
+            document.getElementById('sync-status').classList.add('synced');
+            render();
+        }
+
+        // Get last performance
+        function getLast(exerciseId) {
+            const workouts = state.history.filter(w => w.type === state.type);
+            for (const w of workouts) {
+                const ex = w.exercises?.find(e => e.id === exerciseId);
+                if (ex && ex.sets?.length) return ex;
+            }
+            return null;
+        }
+
+        // Render
+        function render() {
+            const container = document.getElementById('exercises');
+            const exercises = WORKOUTS[state.type];
+
+            container.innerHTML = exercises.map(ex => {
+                const last = getLast(ex.id);
+                const sess = state.session[ex.id] || { sets: [] };
+
+                // Init session
+                if (!sess.sets.length) {
+                    for (let i = 0; i < ex.sets; i++) {
+                        const lastSet = last?.sets?.[i];
+                        sess.sets.push({
+                            weight: lastSet ? lastSet.weight + 2.5 : '',
+                            reps: ex.reps,
+                            done: false
+                        });
+                    }
+                    state.session[ex.id] = sess;
+                }
+
+                const done = sess.sets.filter(s => s.done).length;
+                const lastInfo = last ? last.sets.map(s => `${s.weight}×${s.reps}`).join(', ') : '';
+
+                return `
+                    <div class="exercise" data-id="${ex.id}">
+                        <div class="exercise-header">
+                            <span class="exercise-name">${ex.name}</span>
+                            <span class="exercise-status">${done}/${sess.sets.length}</span>
+                        </div>
+                        <div class="exercise-body">
+                            ${lastInfo ? `<div class="previous">Last: ${lastInfo}</div>` : ''}
+                            ${sess.sets.map((s, i) => `
+                                <div class="set-row" data-set="${i}">
+                                    <div class="set-num">${i + 1}</div>
+                                    <div class="set-input">
+                                        <label>LBS</label>
+                                        <input type="number" class="weight" value="${s.weight}" placeholder="${last?.sets?.[i]?.weight + 2.5 || 0}" step="2.5">
+                                    </div>
+                                    <div class="set-input">
+                                        <label>REPS</label>
+                                        <input type="number" class="reps" value="${s.reps}">
+                                    </div>
+                                    <button class="set-check ${s.done ? 'done' : ''}">✓</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Update finish button
+            const anyDone = Object.values(state.session).some(s => s.sets?.some(set => set.done));
+            document.getElementById('finish').disabled = !anyDone;
+
+            // Add event listeners
+            container.querySelectorAll('.exercise-header').forEach(h => {
+                h.onclick = () => h.parentElement.classList.toggle('open');
+            });
+
+            container.querySelectorAll('.set-row').forEach(row => {
+                const exId = row.closest('.exercise').dataset.id;
+                const setIdx = parseInt(row.dataset.set);
+
+                row.querySelector('.weight').onchange = (e) => {
+                    state.session[exId].sets[setIdx].weight = parseFloat(e.target.value) || 0;
+                };
+
+                row.querySelector('.reps').onchange = (e) => {
+                    state.session[exId].sets[setIdx].reps = parseInt(e.target.value) || 0;
+                };
+
+                row.querySelector('.set-check').onclick = (e) => {
+                    const set = state.session[exId].sets[setIdx];
+                    set.done = !set.done;
+
+                    // Use placeholder if no weight
+                    if (set.done && !set.weight) {
+                        const input = row.querySelector('.weight');
+                        set.weight = parseFloat(input.placeholder) || 0;
+                        input.value = set.weight;
+                    }
+
+                    e.target.classList.toggle('done', set.done);
+
+                    // Update status
+                    const ex = row.closest('.exercise');
+                    const done = state.session[exId].sets.filter(s => s.done).length;
+                    ex.querySelector('.exercise-status').textContent = `${done}/${state.session[exId].sets.length}`;
+
+                    // Update finish button
+                    const anyDone = Object.values(state.session).some(s => s.sets?.some(set => set.done));
+                    document.getElementById('finish').disabled = !anyDone;
+                };
+            });
+        }
+
+        // Switch workout type
+        function switchType(type) {
+            state.type = type;
+            state.session = {};
+
+            document.querySelectorAll('.workout-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.type === type);
+            });
+
+            const header = document.getElementById('header');
+            header.textContent = type.charAt(0).toUpperCase() + type.slice(1) + ' Day';
+            header.className = 'header ' + type;
+
+            render();
+        }
+
+        // Finish workout
+        async function finish() {
+            const exercises = [];
+
+            WORKOUTS[state.type].forEach(ex => {
+                const sess = state.session[ex.id];
+                if (sess && sess.sets.some(s => s.done)) {
+                    exercises.push({
+                        id: ex.id,
+                        name: ex.name,
+                        sets: sess.sets.filter(s => s.done).map(s => ({
+                            weight: s.weight,
+                            reps: s.reps
+                        })),
+                        date: new Date().toISOString()
+                    });
+                }
+            });
+
+            if (!exercises.length) return;
+
+            const workout = {
+                id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                type: state.type,
+                date: new Date().toISOString(),
+                exercises
+            };
+
+            state.history.unshift(workout);
+            localStorage.setItem('workoutHistory', JSON.stringify(state.history));
+
+            // Sync
+            if (state.key) {
+                await saveData({ workoutHistory: state.history });
+            }
+
+            // Reset
+            state.session = {};
+            render();
+
+            toast('Workout saved!');
+        }
+
+        function toast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        // Init
+        function init() {
+            checkParams();
+
+            // Load local history
+            const local = localStorage.getItem('workoutHistory');
+            if (local) {
+                try { state.history = JSON.parse(local); } catch (e) {}
+            }
+
+            if (state.key) {
+                document.getElementById('setup').classList.add('hidden');
+                document.getElementById('main').classList.remove('hidden');
+                sync();
+            }
+
+            // Events
+            document.querySelectorAll('.workout-btn').forEach(b => {
+                b.onclick = () => switchType(b.dataset.type);
+            });
+
+            document.getElementById('finish').onclick = finish;
+
+            document.getElementById('save-key').onclick = () => {
+                const key = document.getElementById('key-input').value.trim();
+                if (key) {
+                    state.key = key;
+                    localStorage.setItem('npointId', key);
+                    document.getElementById('setup').classList.add('hidden');
+                    document.getElementById('main').classList.remove('hidden');
+                    sync();
+                }
+            };
+
+            render();
+        }
+
+        init();
+    </script>
+</body>
+</html>

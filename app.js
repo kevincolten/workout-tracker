@@ -604,11 +604,62 @@ function showToast(message, type = 'info') {
 // nPoint Setup
 // ==========================================
 
+function checkUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const keyParam = urlParams.get('key');
+
+    if (keyParam) {
+        // Save the key
+        state.npointId = keyParam;
+        localStorage.setItem('npointId', keyParam);
+
+        // Remove the param from URL without reload
+        const newUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, newUrl);
+
+        return true;
+    }
+    return false;
+}
+
 function setupNpoint() {
+    // Check URL params first
+    const fromUrl = checkUrlParams();
+
     if (state.npointId) {
         elements.npointSetup.classList.add('hidden');
         elements.npointInput.value = state.npointId;
+        showConnectedStatus();
         syncData();
+    }
+}
+
+function showConnectedStatus() {
+    // Show the connected indicator with clear button
+    const connectedEl = document.getElementById('npoint-connected');
+    if (connectedEl) {
+        connectedEl.classList.remove('hidden');
+        const idDisplay = document.getElementById('connected-id');
+        if (idDisplay) {
+            idDisplay.textContent = state.npointId;
+        }
+    }
+}
+
+function clearNpointId() {
+    if (confirm('Clear sync connection? Your local data will be kept.')) {
+        state.npointId = null;
+        localStorage.removeItem('npointId');
+        elements.npointSetup.classList.remove('hidden');
+        elements.npointInput.value = '';
+
+        const connectedEl = document.getElementById('npoint-connected');
+        if (connectedEl) {
+            connectedEl.classList.add('hidden');
+        }
+
+        updateSyncStatus('disconnected');
+        showToast('Sync connection cleared', 'success');
     }
 }
 
@@ -622,6 +673,7 @@ function saveNpointId() {
     state.npointId = id;
     localStorage.setItem('npointId', id);
     elements.npointSetup.classList.add('hidden');
+    showConnectedStatus();
     syncData();
 }
 
@@ -731,6 +783,12 @@ function initEventListeners() {
     // nPoint setup
     elements.saveNpointBtn.addEventListener('click', saveNpointId);
     elements.syncBtn.addEventListener('click', syncData);
+
+    // Clear nPoint connection
+    const clearBtn = document.getElementById('clear-npoint');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', clearNpointId);
+    }
 
     // Workout actions
     elements.finishBtn.addEventListener('click', finishWorkout);
