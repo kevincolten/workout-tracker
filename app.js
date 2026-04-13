@@ -610,17 +610,95 @@ function saveNpointId() {
 }
 
 // ==========================================
-// PWA Service Worker Registration
+// PWA Service Worker Registration & Updates
 // ==========================================
 
+let newWorker = null;
+
 async function registerServiceWorker() {
-    if ('serviceWorker' in navigator) {
-        try {
-            const registration = await navigator.serviceWorker.register('sw.js');
-            console.log('ServiceWorker registered:', registration.scope);
-        } catch (error) {
-            console.log('ServiceWorker registration failed:', error);
-        }
+    if (!('serviceWorker' in navigator)) {
+        return;
+    }
+
+    try {
+        const registration = await navigator.serviceWorker.register('sw.js');
+        console.log('ServiceWorker registered:', registration.scope);
+
+        // Check for updates immediately
+        registration.update();
+
+        // Check for updates periodically (every 60 seconds)
+        setInterval(() => {
+            registration.update();
+        }, 60000);
+
+        // Listen for new service worker installing
+        registration.addEventListener('updatefound', () => {
+            newWorker = registration.installing;
+            console.log('New service worker installing...');
+
+            newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // New version available
+                    console.log('New version available!');
+                    showUpdateBanner();
+                }
+            });
+        });
+
+        // Listen for controller change (after skipWaiting)
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            // Reload to get the new version
+            window.location.reload();
+        });
+
+        // Listen for messages from service worker
+        navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'APP_UPDATED') {
+                showToast('App updated!', 'success');
+            }
+            if (event.data && event.data.type === 'SYNC_REQUESTED') {
+                syncData();
+            }
+        });
+
+    } catch (error) {
+        console.log('ServiceWorker registration failed:', error);
+    }
+}
+
+function showUpdateBanner() {
+    const banner = document.getElementById('update-banner');
+    if (banner) {
+        banner.classList.remove('hidden');
+    }
+}
+
+function hideUpdateBanner() {
+    const banner = document.getElementById('update-banner');
+    if (banner) {
+        banner.classList.add('hidden');
+    }
+}
+
+function applyUpdate() {
+    if (newWorker) {
+        // Tell the new service worker to skip waiting
+        newWorker.postMessage({ type: 'SKIP_WAITING' });
+    }
+    hideUpdateBanner();
+}
+
+function initUpdateListeners() {
+    const updateBtn = document.getElementById('update-btn');
+    const dismissBtn = document.getElementById('dismiss-update');
+
+    if (updateBtn) {
+        updateBtn.addEventListener('click', applyUpdate);
+    }
+
+    if (dismissBtn) {
+        dismissBtn.addEventListener('click', hideUpdateBanner);
     }
 }
 
@@ -666,6 +744,7 @@ function init() {
     loadLocalData();
     setupNpoint();
     initEventListeners();
+    initUpdateListeners();
     renderExercises('pull');
     registerServiceWorker();
 }

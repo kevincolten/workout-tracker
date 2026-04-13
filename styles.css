@@ -647,3 +647,69 @@ main {
 .remove-set-btn:hover {
     color: var(--primary-color);
 }
+
+/* Update Banner */
+.update-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 1002;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    animation: slideInUp 0.3s ease;
+}
+
+.update-banner.hidden {
+    display: none;
+}
+
+.update-banner span {
+    font-weight: 500;
+}
+
+.update-banner #update-btn {
+    background: white;
+    color: #1976d2;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+
+.update-banner #update-btn:hover {
+    transform: scale(1.05);
+}
+
+.update-banner .dismiss-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 0.5rem;
+    opacity: 0.8;
+    line-height: 1;
+}
+
+.update-banner .dismiss-btn:hover {
+    opacity: 1;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
