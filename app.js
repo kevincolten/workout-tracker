@@ -182,6 +182,9 @@ async function syncData() {
             // Sort by date descending
             state.workoutHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
             saveLocalData();
+
+            // Re-render exercises to update weight suggestions from imported data
+            refreshAllExercises();
         } else {
             // No remote data, push local data
             await npointAPI.save({
@@ -251,6 +254,19 @@ function getSuggestedWeight(lastWeight) {
 // ==========================================
 // UI Rendering
 // ==========================================
+
+function refreshAllExercises() {
+    // Clear current session to recalculate weight suggestions from imported history
+    state.currentSession = {};
+    saveLocalData();
+
+    // Re-render all workout tabs that have been rendered
+    ['pull', 'push', 'legs'].forEach(workoutType => {
+        if (elements.exercises[workoutType].children.length > 0) {
+            renderExercises(workoutType);
+        }
+    });
+}
 
 function renderExercises(workoutType) {
     const container = elements.exercises[workoutType];
