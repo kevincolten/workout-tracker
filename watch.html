@@ -178,6 +178,20 @@
             border-color: #30d158;
         }
 
+        .set-clear {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            background: #3a3a3c;
+            color: #8e8e93;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         /* Previous */
         .previous {
             font-size: 11px;
@@ -418,12 +432,11 @@
                 const last = getLast(ex.id);
                 const sess = state.session[ex.id] || { sets: [] };
 
-                // Init session
+                // Init session (don't autofill weight - just use placeholder)
                 if (!sess.sets.length) {
                     for (let i = 0; i < ex.sets; i++) {
-                        const lastSet = last?.sets?.[i];
                         sess.sets.push({
-                            weight: lastSet ? lastSet.weight + 2.5 : '',
+                            weight: '',
                             reps: ex.reps,
                             done: false
                         });
@@ -453,6 +466,7 @@
                                         <label>REPS</label>
                                         <input type="number" class="reps" value="${s.reps}">
                                     </div>
+                                    <button class="set-clear">✕</button>
                                     <button class="set-check ${s.done ? 'done' : ''}">✓</button>
                                 </div>
                             `).join('')}
@@ -480,6 +494,14 @@
 
                 row.querySelector('.reps').onchange = (e) => {
                     state.session[exId].sets[setIdx].reps = parseInt(e.target.value) || 0;
+                };
+
+                row.querySelector('.set-clear').onclick = () => {
+                    const set = state.session[exId].sets[setIdx];
+                    set.weight = '';
+                    set.reps = '';
+                    row.querySelector('.weight').value = '';
+                    row.querySelector('.reps').value = '';
                 };
 
                 row.querySelector('.set-check').onclick = (e) => {
