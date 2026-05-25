@@ -16,59 +16,126 @@
         <p class="subtitle">Push Pull Legs Routine</p>
     </header>
 
-    <nav class="workout-tabs">
-        <button class="tab-btn active" data-workout="pull">Pull</button>
-        <button class="tab-btn" data-workout="push">Push</button>
-        <button class="tab-btn" data-workout="legs">Legs</button>
-    </nav>
+    <!-- Mobile View -->
+    <div id="mobile-view">
+        <nav class="workout-tabs">
+            <button class="tab-btn active" data-workout="pull">Pull</button>
+            <button class="tab-btn" data-workout="push">Push</button>
+            <button class="tab-btn" data-workout="legs">Legs</button>
+            <button class="tab-btn" data-workout="records">Records</button>
+        </nav>
 
-    <main>
-        <div class="sync-status">
-            <span id="sync-indicator">●</span>
-            <span id="sync-text">Not synced</span>
-            <button id="sync-btn" class="btn-small">Sync</button>
+        <main>
+            <div class="sync-status">
+                <span id="sync-indicator">●</span>
+                <span id="sync-text">Not synced</span>
+                <button id="sync-btn" class="btn-small">Sync</button>
+            </div>
+
+            <div class="npoint-setup" id="npoint-setup">
+                <h3>Setup Data Sync</h3>
+                <p>Enter your npoint.io bin ID to sync your workout data:</p>
+                <input type="text" id="npoint-id" placeholder="e.g., abc123def456">
+                <button id="save-npoint" class="btn">Save & Sync</button>
+                <p class="help-text">
+                    Don't have one? Create a free bin at
+                    <a href="https://www.npoint.io/" target="_blank">npoint.io</a>
+                    with an empty object <code>{}</code>
+                </p>
+            </div>
+
+            <div class="npoint-connected hidden" id="npoint-connected">
+                <span>Connected: <code id="connected-id"></code></span>
+                <button id="clear-npoint" class="btn-small btn-danger">Clear</button>
+            </div>
+
+            <!-- Pull Workout -->
+            <section class="workout-section" id="pull-section">
+                <h2>Pull Day <button class="reorder-toggle btn-small" data-workout="pull">Reorder</button></h2>
+                <div class="exercises" id="pull-exercises" data-workout="pull"></div>
+            </section>
+
+            <!-- Push Workout -->
+            <section class="workout-section hidden" id="push-section">
+                <h2>Push Day <button class="reorder-toggle btn-small" data-workout="push">Reorder</button></h2>
+                <div class="exercises" id="push-exercises" data-workout="push"></div>
+            </section>
+
+            <!-- Legs Workout -->
+            <section class="workout-section hidden" id="legs-section">
+                <h2>Legs Day <button class="reorder-toggle btn-small" data-workout="legs">Reorder</button></h2>
+                <div class="exercises" id="legs-exercises" data-workout="legs"></div>
+            </section>
+
+            <!-- Records Section -->
+            <section class="workout-section hidden" id="records-section">
+                <h2>Personal Records</h2>
+                <div id="records-content"></div>
+            </section>
+
+            <div class="actions" id="workout-actions">
+                <button id="finish-workout" class="btn btn-primary">Finish Workout</button>
+                <button id="view-history" class="btn btn-secondary">View History</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Desktop View -->
+    <div id="desktop-view" class="hidden">
+        <div class="desktop-header">
+            <div class="sync-status">
+                <span id="desktop-sync-indicator">●</span>
+                <span id="desktop-sync-text">Not synced</span>
+                <button id="desktop-sync-btn" class="btn-small">Sync</button>
+            </div>
+            <div class="desktop-tabs">
+                <button class="desktop-tab active" data-view="workouts">Workouts</button>
+                <button class="desktop-tab" data-view="records">Records</button>
+                <button class="desktop-tab" data-view="progress">Progress</button>
+            </div>
         </div>
 
-        <div class="npoint-setup" id="npoint-setup">
-            <h3>Setup Data Sync</h3>
-            <p>Enter your npoint.io bin ID to sync your workout data:</p>
-            <input type="text" id="npoint-id" placeholder="e.g., abc123def456">
-            <button id="save-npoint" class="btn">Save & Sync</button>
-            <p class="help-text">
-                Don't have one? Create a free bin at
-                <a href="https://www.npoint.io/" target="_blank">npoint.io</a>
-                with an empty object <code>{}</code>
-            </p>
+        <!-- Workouts Grid View -->
+        <div class="desktop-content" id="desktop-workouts">
+            <div class="workouts-grid">
+                <div class="workout-column" id="desktop-pull">
+                    <h2 class="column-header pull">Pull</h2>
+                    <div class="workout-list" id="desktop-pull-list"></div>
+                </div>
+                <div class="workout-column" id="desktop-push">
+                    <h2 class="column-header push">Push</h2>
+                    <div class="workout-list" id="desktop-push-list"></div>
+                </div>
+                <div class="workout-column" id="desktop-legs">
+                    <h2 class="column-header legs">Legs</h2>
+                    <div class="workout-list" id="desktop-legs-list"></div>
+                </div>
+            </div>
         </div>
 
-        <div class="npoint-connected hidden" id="npoint-connected">
-            <span>Connected: <code id="connected-id"></code></span>
-            <button id="clear-npoint" class="btn-small btn-danger">Clear</button>
+        <!-- Records View -->
+        <div class="desktop-content hidden" id="desktop-records">
+            <div id="desktop-records-content"></div>
         </div>
 
-        <!-- Pull Workout -->
-        <section class="workout-section" id="pull-section">
-            <h2>Pull Day</h2>
-            <div class="exercises" id="pull-exercises"></div>
-        </section>
-
-        <!-- Push Workout -->
-        <section class="workout-section hidden" id="push-section">
-            <h2>Push Day</h2>
-            <div class="exercises" id="push-exercises"></div>
-        </section>
-
-        <!-- Legs Workout -->
-        <section class="workout-section hidden" id="legs-section">
-            <h2>Legs Day</h2>
-            <div class="exercises" id="legs-exercises"></div>
-        </section>
-
-        <div class="actions">
-            <button id="finish-workout" class="btn btn-primary">Finish Workout</button>
-            <button id="view-history" class="btn btn-secondary">View History</button>
+        <!-- Progress/Charts View -->
+        <div class="desktop-content hidden" id="desktop-progress">
+            <div class="exercise-selector">
+                <label>Select Exercise:</label>
+                <select id="progress-exercise-select"></select>
+            </div>
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>Volume Over Time (Weight × Reps)</h3>
+                    <div class="heatmap-container" id="volume-heatmap"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>Max Weight Progression</h3>
+                    <div class="chart-container" id="weight-chart"></div>
+                </div>
+            </div>
         </div>
-    </main>
+    </div>
 
     <!-- History Modal -->
     <div class="modal hidden" id="history-modal">
@@ -77,9 +144,33 @@
                 <h2>Workout History</h2>
                 <button class="close-btn" id="close-history">&times;</button>
             </div>
-            <div class="modal-body" id="history-content">
-                <!-- History will be populated here -->
+            <div class="modal-body" id="history-content"></div>
+        </div>
+    </div>
+
+    <!-- Edit Session Modal -->
+    <div class="modal hidden" id="edit-modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Edit Workout</h2>
+                <button class="close-btn" id="close-edit">&times;</button>
             </div>
+            <div class="modal-body" id="edit-content"></div>
+            <div class="modal-footer">
+                <button id="delete-workout" class="btn btn-danger">Delete Workout</button>
+                <button id="save-workout" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise History Modal -->
+    <div class="modal hidden" id="exercise-history-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="exercise-history-title">Exercise History</h2>
+                <button class="close-btn" id="close-exercise-history">&times;</button>
+            </div>
+            <div class="modal-body" id="exercise-history-content"></div>
         </div>
     </div>
 

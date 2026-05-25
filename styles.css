@@ -740,3 +740,524 @@ main {
         transform: translateY(0);
     }
 }
+
+/* ==========================================
+   Exercise History Expand/Collapse
+   ========================================== */
+
+.exercise-history-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 0.8rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.exercise-history-toggle:hover {
+    text-decoration: underline;
+}
+
+.exercise-full-history {
+    display: none;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.exercise-full-history.expanded {
+    display: block;
+}
+
+.history-entry {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: var(--background);
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.history-entry-date {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.history-entry-sets {
+    font-weight: 500;
+    margin-top: 0.25rem;
+}
+
+/* ==========================================
+   Drag and Drop Reordering
+   ========================================== */
+
+.reorder-toggle {
+    background: var(--secondary-color);
+    margin-left: auto;
+}
+
+.reorder-toggle.active {
+    background: var(--success-color);
+}
+
+.exercises.reordering .exercise-card {
+    cursor: grab;
+    border: 2px dashed transparent;
+    transition: border-color 0.2s;
+}
+
+.exercises.reordering .exercise-card:hover {
+    border-color: var(--primary-color);
+}
+
+.exercise-card.dragging {
+    opacity: 0.5;
+    cursor: grabbing !important;
+}
+
+.exercise-card.drag-over {
+    border-color: var(--success-color) !important;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.drag-handle {
+    display: none;
+    padding: 0.5rem;
+    cursor: grab;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+
+.exercises.reordering .drag-handle {
+    display: flex;
+    align-items: center;
+}
+
+/* ==========================================
+   Records Section
+   ========================================== */
+
+#records-section h2,
+#desktop-records h2 {
+    color: var(--warning-color);
+}
+
+.records-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.record-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.record-card h3 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.record-card h3::before {
+    content: "🏆";
+}
+
+.record-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.record-item:last-child {
+    border-bottom: none;
+}
+
+.record-exercise {
+    font-weight: 500;
+}
+
+.record-value {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.record-date {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* ==========================================
+   Edit Modal
+   ========================================== */
+
+.modal-large {
+    max-width: 700px;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    justify-content: space-between;
+}
+
+.modal-footer .btn {
+    width: auto;
+    padding: 0.75rem 1.5rem;
+}
+
+.modal-footer .btn-danger {
+    background: var(--primary-color);
+}
+
+.edit-exercise {
+    background: var(--background);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.edit-exercise-header {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.edit-set-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 1fr auto;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.edit-set-row input {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-align: center;
+}
+
+.delete-set-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.25rem;
+}
+
+/* History Edit Button */
+.history-item {
+    position: relative;
+}
+
+.edit-history-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.edit-history-btn:hover {
+    color: var(--primary-color);
+}
+
+/* ==========================================
+   Desktop View
+   ========================================== */
+
+#desktop-view {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    #mobile-view {
+        display: none;
+    }
+
+    #desktop-view {
+        display: block;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+
+    #desktop-view.hidden {
+        display: none;
+    }
+
+    .desktop-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--card-bg);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .desktop-tabs {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .desktop-tab {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        background: var(--background);
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .desktop-tab:hover {
+        background: var(--border-color);
+    }
+
+    .desktop-tab.active {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .desktop-content {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .desktop-content.hidden {
+        display: none;
+    }
+
+    /* Workouts Grid */
+    .workouts-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+
+    .workout-column {
+        min-height: 400px;
+    }
+
+    .column-header {
+        font-size: 1.25rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        color: white;
+        text-align: center;
+    }
+
+    .column-header.pull { background: var(--pull-color); }
+    .column-header.push { background: var(--push-color); }
+    .column-header.legs { background: var(--legs-color); }
+
+    .workout-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .desktop-workout-card {
+        background: var(--background);
+        border-radius: 8px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+    }
+
+    .desktop-workout-card:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+    }
+
+    .desktop-workout-date {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .desktop-workout-summary {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    /* Desktop Records */
+    #desktop-records .records-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Progress/Charts */
+    .exercise-selector {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .exercise-selector select {
+        padding: 0.75rem 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        min-width: 250px;
+    }
+
+    .charts-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .chart-card {
+        background: var(--background);
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+
+    .chart-card h3 {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        color: var(--text-secondary);
+    }
+
+    /* Heatmap */
+    .heatmap-container {
+        overflow-x: auto;
+    }
+
+    .heatmap {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .heatmap-row {
+        display: flex;
+        gap: 3px;
+        align-items: center;
+    }
+
+    .heatmap-label {
+        width: 40px;
+        font-size: 0.7rem;
+        color: var(--text-secondary);
+        text-align: right;
+        padding-right: 8px;
+    }
+
+    .heatmap-cell {
+        width: 14px;
+        height: 14px;
+        border-radius: 2px;
+        background: var(--border-color);
+        cursor: pointer;
+        position: relative;
+    }
+
+    .heatmap-cell:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--secondary-color);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        white-space: nowrap;
+        z-index: 10;
+    }
+
+    .heatmap-cell.level-1 { background: rgba(76, 175, 80, 0.2); }
+    .heatmap-cell.level-2 { background: rgba(76, 175, 80, 0.4); }
+    .heatmap-cell.level-3 { background: rgba(76, 175, 80, 0.6); }
+    .heatmap-cell.level-4 { background: rgba(76, 175, 80, 0.8); }
+    .heatmap-cell.level-5 { background: var(--success-color); }
+
+    .heatmap-months {
+        display: flex;
+        padding-left: 48px;
+        margin-bottom: 4px;
+    }
+
+    .heatmap-month {
+        font-size: 0.7rem;
+        color: var(--text-secondary);
+        flex: 1;
+    }
+
+    /* Line Chart */
+    .chart-container {
+        height: 200px;
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        padding: 1rem 0;
+    }
+
+    .chart-bar {
+        flex: 1;
+        background: var(--primary-color);
+        border-radius: 4px 4px 0 0;
+        min-height: 4px;
+        position: relative;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .chart-bar:hover {
+        opacity: 0.8;
+    }
+
+    .chart-bar::after {
+        content: attr(data-value);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        color: var(--text-secondary);
+        display: none;
+    }
+
+    .chart-bar:hover::after {
+        display: block;
+    }
+}
+
+/* ==========================================
+   Tab for Records (mobile)
+   ========================================== */
+
+.tab-btn[data-workout="records"].active {
+    color: var(--warning-color);
+    border-bottom-color: var(--warning-color);
+}
+
+#workout-actions.hidden {
+    display: none;
+}
