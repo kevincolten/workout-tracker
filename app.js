@@ -580,55 +580,147 @@ function showExerciseHistory(exerciseId, workoutType) {
 }
 
 // ==========================================
-// Drag and Drop Reordering
+// Drag and Drop Reordering (Touch + Desktop)
 // ==========================================
 
+let dragState = {
+    el: null,
+    startY: 0,
+    currentY: 0,
+    placeholder: null,
+    container: null,
+    workoutType: null
+};
+
 function initDragAndDrop(container, workoutType) {
-    let draggedEl = null;
+    dragState.container = container;
+    dragState.workoutType = workoutType;
 
     container.querySelectorAll('.exercise-card').forEach(card => {
-        card.addEventListener('dragstart', (e) => {
-            draggedEl = card;
-            card.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-        });
+        const handle = card.querySelector('.drag-handle');
+        if (!handle) return;
 
-        card.addEventListener('dragend', () => {
-            card.classList.remove('dragging');
-            container.querySelectorAll('.exercise-card').forEach(c => c.classList.remove('drag-over'));
+        // Touch events for mobile
+        handle.addEventListener('touchstart', (e) => handleDragStart(e, card), { passive: false });
+        handle.addEventListener('touchmove', (e) => handleDragMove(e), { passive: false });
+        handle.addEventListener('touchend', (e) => handleDragEnd(e), { passive: false });
 
-            const newOrder = [...container.querySelectorAll('.exercise-card')].map(c => c.dataset.exerciseId);
-            state.exerciseOrder[workoutType] = newOrder;
-            saveExerciseOrder();
-        });
-
-        card.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            if (draggedEl && draggedEl !== card) {
-                card.classList.add('drag-over');
-            }
-        });
-
-        card.addEventListener('dragleave', () => {
-            card.classList.remove('drag-over');
-        });
-
-        card.addEventListener('drop', (e) => {
-            e.preventDefault();
-            card.classList.remove('drag-over');
-            if (draggedEl && draggedEl !== card) {
-                const allCards = [...container.querySelectorAll('.exercise-card')];
-                const draggedIdx = allCards.indexOf(draggedEl);
-                const targetIdx = allCards.indexOf(card);
-
-                if (draggedIdx < targetIdx) {
-                    card.after(draggedEl);
-                } else {
-                    card.before(draggedEl);
-                }
-            }
-        });
+        // Mouse events for desktop
+        handle.addEventListener('mousedown', (e) => handleMouseStart(e, card));
     });
+
+    // Desktop mouse events on document
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseEnd);
+}
+
+function handleDragStart(e, card) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    startDrag(card, touch.clientY);
+}
+
+function handleMouseStart(e, card) {
+    e.preventDefault();
+    startDrag(card, e.clientY);
+}
+
+function startDrag(card, y) {
+    dragState.el = card;
+    dragState.startY = y;
+    dragState.currentY = y;
+
+    // Create placeholder
+    dragState.placeholder = document.createElement('div');
+    dragState.placeholder.className = 'exercise-card drag-placeholder';
+    dragState.placeholder.style.height = card.offsetHeight + 'px';
+    dragState.placeholder.style.background = 'var(--border-color)';
+    dragState.placeholder.style.borderRadius = '12px';
+    dragState.placeholder.style.marginBottom = '1rem';
+
+    card.classList.add('dragging');
+    card.style.position = 'fixed';
+    card.style.zIndex = '1000';
+    card.style.width = card.offsetWidth + 'px';
+    card.style.left = card.getBoundingClientRect().left + 'px';
+    card.style.top = card.getBoundingClientRect().top + 'px';
+    card.style.pointerEvents = 'none';
+
+    card.parentNode.insertBefore(dragState.placeholder, card);
+}
+
+function handleDragMove(e) {
+    if (!dragState.el) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    moveDrag(touch.clientY);
+}
+
+function handleMouseMove(e) {
+    if (!dragState.el) return;
+    moveDrag(e.clientY);
+}
+
+function moveDrag(y) {
+    if (!dragState.el) return;
+
+    const deltaY = y - dragState.currentY;
+    dragState.currentY = y;
+
+    const currentTop = parseFloat(dragState.el.style.top);
+    dragState.el.style.top = (currentTop + deltaY) + 'px';
+
+    // Find element we're hovering over
+    const cards = [...dragState.container.querySelectorAll('.exercise-card:not(.dragging):not(.drag-placeholder)')];
+
+    for (const card of cards) {
+        const rect = card.getBoundingClientRect();
+        const midY = rect.top + rect.height / 2;
+
+        if (y < midY) {
+            card.parentNode.insertBefore(dragState.placeholder, card);
+            break;
+        } else if (card === cards[cards.length - 1]) {
+            card.parentNode.insertBefore(dragState.placeholder, card.nextSibling);
+        }
+    }
+}
+
+function handleDragEnd(e) {
+    if (!dragState.el) return;
+    e.preventDefault();
+    endDrag();
+}
+
+function handleMouseEnd() {
+    if (!dragState.el) return;
+    endDrag();
+}
+
+function endDrag() {
+    if (!dragState.el || !dragState.placeholder) return;
+
+    // Move card to placeholder position
+    dragState.placeholder.parentNode.insertBefore(dragState.el, dragState.placeholder);
+    dragState.placeholder.remove();
+
+    // Reset styles
+    dragState.el.classList.remove('dragging');
+    dragState.el.style.position = '';
+    dragState.el.style.zIndex = '';
+    dragState.el.style.width = '';
+    dragState.el.style.left = '';
+    dragState.el.style.top = '';
+    dragState.el.style.pointerEvents = '';
+
+    // Save new order
+    const newOrder = [...dragState.container.querySelectorAll('.exercise-card')].map(c => c.dataset.exerciseId);
+    state.exerciseOrder[dragState.workoutType] = newOrder;
+    saveExerciseOrder();
+
+    // Reset state
+    dragState.el = null;
+    dragState.placeholder = null;
 }
 
 function toggleReorderMode(workoutType) {

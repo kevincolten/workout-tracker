@@ -817,8 +817,11 @@ main {
 }
 
 .exercise-card.dragging {
-    opacity: 0.5;
+    opacity: 0.9;
     cursor: grabbing !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    transform: scale(1.02);
+    background: var(--card-bg);
 }
 
 .exercise-card.drag-over {
@@ -826,17 +829,37 @@ main {
     background: rgba(76, 175, 80, 0.1);
 }
 
+.drag-placeholder {
+    opacity: 0.5;
+}
+
 .drag-handle {
     display: none;
-    padding: 0.5rem;
+    padding: 1rem 0.75rem;
     cursor: grab;
     color: var(--text-secondary);
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+    color: var(--primary-color);
 }
 
 .exercises.reordering .drag-handle {
     display: flex;
     align-items: center;
+}
+
+.exercises.reordering .exercise-header {
+    padding-left: 0;
+}
+
+.exercises.reordering .exercise-toggle {
+    display: none;
 }
 
 /* ==========================================
