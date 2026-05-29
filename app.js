@@ -1130,6 +1130,7 @@ function setupNpoint() {
     checkUrlParams();
     if (state.npointId) {
         elements.npointSetup?.classList.add('hidden');
+        document.getElementById('desktop-npoint-setup')?.classList.add('hidden');
         if (elements.npointInput) elements.npointInput.value = state.npointId;
         showConnectedStatus();
         syncData();
@@ -1137,26 +1138,42 @@ function setupNpoint() {
 }
 
 function showConnectedStatus() {
+    // Mobile
     const el = document.getElementById('npoint-connected');
     if (el) {
         el.classList.remove('hidden');
         document.getElementById('connected-id').textContent = state.npointId;
     }
+    // Desktop
+    const desktopEl = document.getElementById('desktop-npoint-connected');
+    if (desktopEl) {
+        desktopEl.classList.remove('hidden');
+        document.getElementById('desktop-connected-id').textContent = state.npointId;
+    }
+    document.getElementById('desktop-npoint-setup')?.classList.add('hidden');
 }
 
 function clearNpointId() {
     if (!confirm('Clear sync connection?')) return;
     state.npointId = null;
     localStorage.removeItem('npointId');
+    // Mobile
     elements.npointSetup?.classList.remove('hidden');
     if (elements.npointInput) elements.npointInput.value = '';
     document.getElementById('npoint-connected')?.classList.add('hidden');
+    // Desktop
+    document.getElementById('desktop-npoint-setup')?.classList.remove('hidden');
+    document.getElementById('desktop-npoint-connected')?.classList.add('hidden');
+    const desktopInput = document.getElementById('desktop-npoint-id');
+    if (desktopInput) desktopInput.value = '';
+
     updateSyncStatus('disconnected');
     showToast('Sync cleared', 'success');
 }
 
-function saveNpointId() {
-    const id = elements.npointInput?.value.trim();
+function saveNpointId(inputId = 'npoint-id') {
+    const input = document.getElementById(inputId);
+    const id = input?.value.trim();
     if (!id) {
         showToast('Enter a valid ID', 'error');
         return;
@@ -1204,18 +1221,23 @@ async function registerServiceWorker() {
 function initEventListeners() {
     elements.tabs?.forEach(tab => tab.addEventListener('click', () => switchTab(tab.dataset.workout)));
 
-    elements.saveNpointBtn?.addEventListener('click', saveNpointId);
+    // Mobile npoint
+    elements.saveNpointBtn?.addEventListener('click', () => saveNpointId('npoint-id'));
     elements.syncBtn?.addEventListener('click', syncData);
-    document.getElementById('desktop-sync-btn')?.addEventListener('click', syncData);
     document.getElementById('clear-npoint')?.addEventListener('click', clearNpointId);
+    elements.npointInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') saveNpointId('npoint-id'); });
+
+    // Desktop npoint
+    document.getElementById('desktop-sync-btn')?.addEventListener('click', syncData);
+    document.getElementById('desktop-save-npoint')?.addEventListener('click', () => saveNpointId('desktop-npoint-id'));
+    document.getElementById('desktop-clear-npoint')?.addEventListener('click', clearNpointId);
+    document.getElementById('desktop-npoint-id')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') saveNpointId('desktop-npoint-id'); });
 
     elements.finishBtn?.addEventListener('click', finishWorkout);
     elements.historyBtn?.addEventListener('click', showHistory);
     elements.closeHistoryBtn?.addEventListener('click', hideHistory);
 
     elements.historyModal?.addEventListener('click', (e) => { if (e.target === elements.historyModal) hideHistory(); });
-
-    elements.npointInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') saveNpointId(); });
 
     document.getElementById('close-edit')?.addEventListener('click', closeEditModal);
     document.getElementById('save-workout')?.addEventListener('click', saveEditedWorkout);

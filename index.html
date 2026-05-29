@@ -81,12 +81,22 @@
     </div>
 
     <!-- Desktop View -->
-    <div id="desktop-view" class="hidden">
+    <div id="desktop-view">
         <div class="desktop-header">
-            <div class="sync-status">
-                <span id="desktop-sync-indicator">●</span>
-                <span id="desktop-sync-text">Not synced</span>
-                <button id="desktop-sync-btn" class="btn-small">Sync</button>
+            <div class="desktop-header-left">
+                <div class="sync-status">
+                    <span id="desktop-sync-indicator">●</span>
+                    <span id="desktop-sync-text">Not synced</span>
+                    <button id="desktop-sync-btn" class="btn-small">Sync</button>
+                </div>
+                <div class="desktop-npoint-setup" id="desktop-npoint-setup">
+                    <input type="text" id="desktop-npoint-id" placeholder="npoint.io ID">
+                    <button id="desktop-save-npoint" class="btn-small">Connect</button>
+                </div>
+                <div class="desktop-npoint-connected hidden" id="desktop-npoint-connected">
+                    <span>ID: <code id="desktop-connected-id"></code></span>
+                    <button id="desktop-clear-npoint" class="btn-small btn-danger">Clear</button>
+                </div>
             </div>
             <div class="desktop-tabs">
                 <button class="desktop-tab active" data-view="workouts">Workouts</button>
