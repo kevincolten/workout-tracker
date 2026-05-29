@@ -13,6 +13,8 @@
     --pull-color: #e53935;
     --push-color: #1976d2;
     --legs-color: #388e3c;
+    --upper-color: #7b1fa2;
+    --lower-color: #00796b;
 }
 
 /* Reset and Base */
@@ -106,6 +108,16 @@ header h1 {
 .tab-btn[data-workout="legs"].active {
     color: var(--legs-color);
     border-bottom-color: var(--legs-color);
+}
+
+.tab-btn[data-workout="upper"].active {
+    color: var(--upper-color);
+    border-bottom-color: var(--upper-color);
+}
+
+.tab-btn[data-workout="lower"].active {
+    color: var(--lower-color);
+    border-bottom-color: var(--lower-color);
 }
 
 /* Main Content */
@@ -271,6 +283,8 @@ main {
 #pull-section h2 { color: var(--pull-color); }
 #push-section h2 { color: var(--push-color); }
 #legs-section h2 { color: var(--legs-color); }
+#upper-section h2 { color: var(--upper-color); }
+#lower-section h2 { color: var(--lower-color); }
 
 /* Exercise Card */
 .exercise-card {
@@ -550,6 +564,8 @@ main {
 .history-type.pull { background: var(--pull-color); }
 .history-type.push { background: var(--push-color); }
 .history-type.legs { background: var(--legs-color); }
+.history-type.upper { background: var(--upper-color); }
+.history-type.lower { background: var(--lower-color); }
 
 .history-exercises {
     font-size: 0.85rem;
@@ -1110,8 +1126,8 @@ main {
     /* Workouts Grid */
     .workouts-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
     }
 
     .workout-column {
@@ -1119,10 +1135,10 @@ main {
     }
 
     .column-header {
-        font-size: 1.25rem;
-        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        padding: 0.6rem 0.75rem;
         border-radius: 8px;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
         color: white;
         text-align: center;
     }
@@ -1130,6 +1146,8 @@ main {
     .column-header.pull { background: var(--pull-color); }
     .column-header.push { background: var(--push-color); }
     .column-header.legs { background: var(--legs-color); }
+    .column-header.upper { background: var(--upper-color); }
+    .column-header.lower { background: var(--lower-color); }
 
     .workout-list {
         display: flex;

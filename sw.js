@@ -1,7 +1,7 @@
 // Service Worker for Workout Tracker PWA
 
 // Increment this version to trigger an update
-const CACHE_VERSION = 5;
+const CACHE_VERSION = 6;
 const CACHE_NAME = `workout-tracker-v${CACHE_VERSION}`;
 const ASSETS_TO_CACHE = [
     '/',

@@ -22,7 +22,9 @@
             <button class="tab-btn active" data-workout="pull">Pull</button>
             <button class="tab-btn" data-workout="push">Push</button>
             <button class="tab-btn" data-workout="legs">Legs</button>
-            <button class="tab-btn" data-workout="records">Records</button>
+            <button class="tab-btn" data-workout="upper">Upper</button>
+            <button class="tab-btn" data-workout="lower">Lower</button>
+            <button class="tab-btn" data-workout="records">★</button>
         </nav>
 
         <main>
@@ -65,6 +67,18 @@
             <section class="workout-section hidden" id="legs-section">
                 <h2>Legs Day <button class="reorder-toggle btn-small" data-workout="legs">Reorder</button></h2>
                 <div class="exercises" id="legs-exercises" data-workout="legs"></div>
+            </section>
+
+            <!-- Upper Workout -->
+            <section class="workout-section hidden" id="upper-section">
+                <h2>Upper Day <button class="reorder-toggle btn-small" data-workout="upper">Reorder</button></h2>
+                <div class="exercises" id="upper-exercises" data-workout="upper"></div>
+            </section>
+
+            <!-- Lower Workout -->
+            <section class="workout-section hidden" id="lower-section">
+                <h2>Lower Day <button class="reorder-toggle btn-small" data-workout="lower">Reorder</button></h2>
+                <div class="exercises" id="lower-exercises" data-workout="lower"></div>
             </section>
 
             <!-- Records Section -->
@@ -119,6 +133,14 @@
                 <div class="workout-column" id="desktop-legs">
                     <h2 class="column-header legs">Legs</h2>
                     <div class="workout-list" id="desktop-legs-list"></div>
+                </div>
+                <div class="workout-column" id="desktop-upper">
+                    <h2 class="column-header upper">Upper</h2>
+                    <div class="workout-list" id="desktop-upper-list"></div>
+                </div>
+                <div class="workout-column" id="desktop-lower">
+                    <h2 class="column-header lower">Lower</h2>
+                    <div class="workout-list" id="desktop-lower-list"></div>
                 </div>
             </div>
         </div>

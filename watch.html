@@ -44,6 +44,8 @@
         .header.pull { color: #ff453a; }
         .header.push { color: #0a84ff; }
         .header.legs { color: #30d158; }
+        .header.upper { color: #bf5af2; }
+        .header.lower { color: #32aea4; }
 
         /* Workout Selection */
         .workout-select {
@@ -71,6 +73,8 @@
         .workout-btn.pull.active { background: #ff453a; }
         .workout-btn.push.active { background: #0a84ff; }
         .workout-btn.legs.active { background: #30d158; }
+        .workout-btn.upper.active { background: #bf5af2; }
+        .workout-btn.lower.active { background: #32aea4; }
 
         /* Exercise List */
         .exercises {
@@ -315,6 +319,8 @@
                 <button class="workout-btn pull active" data-type="pull">Pull</button>
                 <button class="workout-btn push" data-type="push">Push</button>
                 <button class="workout-btn legs" data-type="legs">Legs</button>
+                <button class="workout-btn upper" data-type="upper">Up</button>
+                <button class="workout-btn lower" data-type="lower">Low</button>
             </div>
 
             <div class="exercises" id="exercises"></div>
@@ -331,28 +337,47 @@
         // Workout definitions
         const WORKOUTS = {
             pull: [
-                { id: 'deadlift', name: 'Deadlift', sets: 3, reps: 5 },
+                { id: 'deadlift', name: 'Deadlift', sets: 4, reps: 5 },
                 { id: 'pullup', name: 'Pullup', sets: 3, reps: 8 },
                 { id: 'seated-cable-row', name: 'Cable Row', sets: 3, reps: 10 },
-                { id: 'lat-pulldown', name: 'Lat Pulldown', sets: 3, reps: 10 },
+                { id: 'lat-pulldown', name: 'Lat Pulldown', sets: 3, reps: 12 },
+                { id: 'face-pull', name: 'Face Pull', sets: 3, reps: 15 },
                 { id: 'hammer-curl', name: 'Hammer Curl', sets: 3, reps: 12 },
                 { id: 'curl', name: 'Curl', sets: 3, reps: 12 }
             ],
             push: [
-                { id: 'bench-press', name: 'Bench Press', sets: 3, reps: 8 },
-                { id: 'overhead-press', name: 'OHP', sets: 3, reps: 8 },
+                { id: 'bench-press', name: 'Bench Press', sets: 4, reps: 6 },
+                { id: 'overhead-press', name: 'OHP', sets: 4, reps: 8 },
                 { id: 'incline-bench-press', name: 'Incline Bench', sets: 3, reps: 10 },
-                { id: 'tricep-pushdown', name: 'Tri Pushdown', sets: 3, reps: 12 },
+                { id: 'chest-fly', name: 'Chest Fly', sets: 3, reps: 12 },
                 { id: 'lateral-raise', name: 'Lat Raise', sets: 3, reps: 15 },
+                { id: 'tricep-pushdown', name: 'Tri Pushdown', sets: 3, reps: 12 },
                 { id: 'overhead-triceps-extension', name: 'Tri Extension', sets: 3, reps: 12 }
             ],
             legs: [
-                { id: 'squat', name: 'Squat', sets: 3, reps: 8 },
+                { id: 'squat', name: 'Squat', sets: 4, reps: 6 },
                 { id: 'romanian-deadlift', name: 'RDL', sets: 3, reps: 10 },
                 { id: 'leg-press', name: 'Leg Press', sets: 3, reps: 12 },
+                { id: 'leg-extension', name: 'Leg Ext', sets: 3, reps: 12 },
                 { id: 'leg-curl', name: 'Leg Curl', sets: 3, reps: 12 },
-                { id: 'calf-raise', name: 'Calf Raise', sets: 4, reps: 15 },
-                { id: 'glute-drive', name: 'Glute Drive', sets: 3, reps: 12 }
+                { id: 'glute-drive', name: 'Glute Drive', sets: 3, reps: 12 },
+                { id: 'calf-raise', name: 'Calf Raise', sets: 4, reps: 15 }
+            ],
+            upper: [
+                { id: 'bench-press', name: 'Bench Press', sets: 4, reps: 6 },
+                { id: 'pullup', name: 'Pullup', sets: 3, reps: 8 },
+                { id: 'overhead-press', name: 'OHP', sets: 3, reps: 8 },
+                { id: 'seated-cable-row', name: 'Cable Row', sets: 3, reps: 10 },
+                { id: 'lateral-raise', name: 'Lat Raise', sets: 3, reps: 15 },
+                { id: 'hammer-curl', name: 'Hammer Curl', sets: 3, reps: 12 },
+                { id: 'tricep-pushdown', name: 'Tri Pushdown', sets: 3, reps: 12 }
+            ],
+            lower: [
+                { id: 'leg-press', name: 'Leg Press', sets: 4, reps: 12 },
+                { id: 'leg-curl', name: 'Leg Curl', sets: 3, reps: 12 },
+                { id: 'leg-extension', name: 'Leg Ext', sets: 3, reps: 12 },
+                { id: 'glute-drive', name: 'Glute Drive', sets: 3, reps: 12 },
+                { id: 'calf-raise', name: 'Calf Raise', sets: 4, reps: 15 }
             ]
         };
 

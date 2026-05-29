@@ -10,10 +10,11 @@ const DEFAULT_WORKOUTS = {
     pull: {
         name: "Pull",
         exercises: [
-            { id: "deadlift", name: "Deadlift", defaultSets: 3, defaultReps: 5 },
+            { id: "deadlift", name: "Deadlift", defaultSets: 4, defaultReps: 5 },
             { id: "pullup", name: "Pullup", defaultSets: 3, defaultReps: 8 },
             { id: "seated-cable-row", name: "Seated Cable Row", defaultSets: 3, defaultReps: 10 },
-            { id: "lat-pulldown", name: "Lat Pulldown", defaultSets: 3, defaultReps: 10 },
+            { id: "lat-pulldown", name: "Lat Pulldown", defaultSets: 3, defaultReps: 12 },
+            { id: "face-pull", name: "Face Pull", defaultSets: 3, defaultReps: 15 },
             { id: "hammer-curl", name: "Hammer Curl", defaultSets: 3, defaultReps: 12 },
             { id: "curl", name: "Curl", defaultSets: 3, defaultReps: 12 }
         ]
@@ -21,24 +22,47 @@ const DEFAULT_WORKOUTS = {
     push: {
         name: "Push",
         exercises: [
-            { id: "bench-press", name: "Bench Press", defaultSets: 3, defaultReps: 8 },
-            { id: "overhead-press", name: "Overhead Press", defaultSets: 3, defaultReps: 8 },
+            { id: "bench-press", name: "Bench Press", defaultSets: 4, defaultReps: 6 },
+            { id: "overhead-press", name: "Overhead Press", defaultSets: 4, defaultReps: 8 },
             { id: "incline-bench-press", name: "Incline Bench Press", defaultSets: 3, defaultReps: 10 },
-            { id: "tricep-pushdown", name: "Tricep Pushdown", defaultSets: 3, defaultReps: 12 },
+            { id: "chest-fly", name: "Chest Fly", defaultSets: 3, defaultReps: 12 },
             { id: "lateral-raise", name: "Lateral Raise", defaultSets: 3, defaultReps: 15 },
-            { id: "side-lateral-raise", name: "Side Lateral Raise", defaultSets: 3, defaultReps: 15 },
+            { id: "tricep-pushdown", name: "Tricep Pushdown", defaultSets: 3, defaultReps: 12 },
             { id: "overhead-triceps-extension", name: "Overhead Triceps Extension", defaultSets: 3, defaultReps: 12 }
         ]
     },
     legs: {
         name: "Legs",
         exercises: [
-            { id: "squat", name: "Squat", defaultSets: 3, defaultReps: 8 },
+            { id: "squat", name: "Squat", defaultSets: 4, defaultReps: 6 },
             { id: "romanian-deadlift", name: "Romanian Deadlift", defaultSets: 3, defaultReps: 10 },
             { id: "leg-press", name: "Leg Press", defaultSets: 3, defaultReps: 12 },
+            { id: "leg-extension", name: "Leg Extension", defaultSets: 3, defaultReps: 12 },
             { id: "leg-curl", name: "Leg Curl", defaultSets: 3, defaultReps: 12 },
-            { id: "calf-raise", name: "Calf Raise", defaultSets: 4, defaultReps: 15 },
-            { id: "glute-drive", name: "Glute Drive", defaultSets: 3, defaultReps: 12 }
+            { id: "glute-drive", name: "Glute Drive", defaultSets: 3, defaultReps: 12 },
+            { id: "calf-raise", name: "Calf Raise", defaultSets: 4, defaultReps: 15 }
+        ]
+    },
+    upper: {
+        name: "Upper",
+        exercises: [
+            { id: "bench-press", name: "Bench Press", defaultSets: 4, defaultReps: 6 },
+            { id: "pullup", name: "Pullup", defaultSets: 3, defaultReps: 8 },
+            { id: "overhead-press", name: "Overhead Press", defaultSets: 3, defaultReps: 8 },
+            { id: "seated-cable-row", name: "Seated Cable Row", defaultSets: 3, defaultReps: 10 },
+            { id: "lateral-raise", name: "Lateral Raise", defaultSets: 3, defaultReps: 15 },
+            { id: "hammer-curl", name: "Hammer Curl", defaultSets: 3, defaultReps: 12 },
+            { id: "tricep-pushdown", name: "Tricep Pushdown", defaultSets: 3, defaultReps: 12 }
+        ]
+    },
+    lower: {
+        name: "Lower",
+        exercises: [
+            { id: "leg-press", name: "Leg Press", defaultSets: 4, defaultReps: 12 },
+            { id: "leg-curl", name: "Leg Curl", defaultSets: 3, defaultReps: 12 },
+            { id: "leg-extension", name: "Leg Extension", defaultSets: 3, defaultReps: 12 },
+            { id: "glute-drive", name: "Glute Drive", defaultSets: 3, defaultReps: 12 },
+            { id: "calf-raise", name: "Calf Raise", defaultSets: 4, defaultReps: 15 }
         ]
     }
 };
@@ -67,12 +91,16 @@ const elements = {
         pull: document.getElementById('pull-section'),
         push: document.getElementById('push-section'),
         legs: document.getElementById('legs-section'),
+        upper: document.getElementById('upper-section'),
+        lower: document.getElementById('lower-section'),
         records: document.getElementById('records-section')
     },
     exercises: {
         pull: document.getElementById('pull-exercises'),
         push: document.getElementById('push-exercises'),
-        legs: document.getElementById('legs-exercises')
+        legs: document.getElementById('legs-exercises'),
+        upper: document.getElementById('upper-exercises'),
+        lower: document.getElementById('lower-exercises')
     },
     npointSetup: document.getElementById('npoint-setup'),
     npointInput: document.getElementById('npoint-id'),
@@ -386,7 +414,7 @@ function renderRecords() {
 function refreshAllExercises() {
     state.currentSession = {};
     saveLocalData();
-    ['pull', 'push', 'legs'].forEach(type => {
+    ['pull', 'push', 'legs', 'upper', 'lower'].forEach(type => {
         if (elements.exercises[type] && elements.exercises[type].children.length > 0) {
             renderExercises(type);
         }
@@ -978,7 +1006,7 @@ function closeEditModal() {
 function renderDesktopView() {
     if (window.innerWidth < 1024) return;
 
-    ['pull', 'push', 'legs'].forEach(type => {
+    ['pull', 'push', 'legs', 'upper', 'lower'].forEach(type => {
         const list = document.getElementById(`desktop-${type}-list`);
         if (!list) return;
 
